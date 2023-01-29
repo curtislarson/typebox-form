@@ -1,28 +1,29 @@
-export interface SchemaInputProps {
+import { SchemaValue } from "./types";
+import { Signal } from "@preact/signals";
+
+export interface SchemaInputProps<V extends SchemaValue> {
   id: string;
-  title: string;
+  label: string;
   type: "text" | "number" | "email";
   examples: string[];
-  error?: string;
-
-  value?: string;
-  onChange: (id: string, val: string) => void;
+  error: Signal<string | undefined>;
+  value: Signal<V>;
 }
 
-export default function SchemaInput(props: SchemaInputProps) {
+export default function SchemaInput<V extends SchemaValue>(props: SchemaInputProps<V>) {
   return (
     <div>
-      <label htmlFor={props.title} className="block text-sm font-medium text-gray-700">
-        {props.title}
+      <label htmlFor={props.id} className="block text-sm font-medium text-gray-700">
+        {props.label}
       </label>
       <div className="mt-1">
         <input
           type={props.type}
-          name={props.title}
-          id={props.title}
-          data-testid={`${props.title}-input`}
+          name={props.id}
+          id={props.id}
+          data-testid={`${props.id}-input`}
           className={`shadow-sm block w-full sm:text-sm rounded-md ${
-            props.error
+            props.error.peek()
               ? "border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500"
               : "focus:ring-indigo-500 focus:border-indigo-500 border-gray-300"
           }`}
@@ -30,13 +31,14 @@ export default function SchemaInput(props: SchemaInputProps) {
           value={props.value}
           onInput={(e) => {
             if (e.target instanceof HTMLInputElement) {
-              props.onChange(props.id, e.target.value);
+              const value = (props.type === "number" ? Number(e.target.value) : e.target.value) as V;
+              props.value.value = value;
             }
           }}
         />
       </div>
-      {props.error && (
-        <p className="mt-2 text-sm text-red-600" id={`${props.title}-error`}>
+      {props.error.value && (
+        <p className="mt-2 text-sm text-red-600" id={`${props.id}-error`}>
           {props.error}
         </p>
       )}

@@ -1,7 +1,6 @@
 {
   "include": ["examples", "src"],
   "compilerOptions": {
-    "types": ["vitest/config"],
     "allowJs": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,

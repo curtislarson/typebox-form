@@ -1,36 +1,30 @@
-import { TSchema } from "@sinclair/typebox";
 import { TypeGuard } from "@sinclair/typebox/guard";
 import SchemaInput from "./SchemaInput";
-
-export type InputValue = string | number | boolean;
+import { FNumber, FString } from "./types";
 
 export interface SchemaToInputProps {
-  name: string;
-  schema: TSchema;
-  value?: InputValue;
-  onChange: (id: string, val: InputValue) => void;
+  schema: FNumber | FString;
 }
 
-export default function SchemaToInput({ name, schema, value, onChange }: SchemaToInputProps) {
-  if (schema.$id == null) {
+export default function SchemaToInput(props: SchemaToInputProps) {
+  if (props.schema.$id == null) {
     throw new Error("All provided schemas must contain an '$id' property!");
   }
   const sharedProps = {
-    id: schema.$id,
-    title: schema.title ?? name,
-    examples: schema.examples ? (Array.isArray(schema.examples) ? schema.examples : [schema.examples]) : [],
-    value,
-    onChange,
+    id: props.schema.$id,
+    label: props.schema.title ?? props.schema.$id,
+    examples: props.schema.examples
+      ? Array.isArray(props.schema.examples)
+        ? props.schema.examples
+        : [props.schema.examples]
+      : [],
   };
-  if (TypeGuard.TString(schema)) {
-    return <SchemaInput type="text" {...sharedProps} />;
-  } else if (TypeGuard.TNumber(schema)) {
-    return <SchemaInput type="number" {...sharedProps} />;
-  } else if (TypeGuard.TObject(schema)) {
-    return Object.entries(schema.properties).map(([propName, prop]) => (
-      <SchemaToFormGroup name={propName} schema={prop} value={} />
-    ));
+
+  if (TypeGuard.TString(props.schema)) {
+    return <SchemaInput {...sharedProps} type="text" value={props.schema.value} error={props.schema.error} />;
+  } else if (TypeGuard.TNumber(props.schema)) {
+    return <SchemaInput {...sharedProps} type="number" value={props.schema.value} error={props.schema.error} />;
   } else {
-    return <SchemaInput type="text" {...sharedProps} />;
+    return <></>;
   }
 }

@@ -1,7 +1,7 @@
 import { Type as T } from "@sinclair/typebox";
 import { describe } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/preact";
-import Form from "./Form";
+import Form from "./TypeBoxForm";
 
 describe("Form", (it) => {
   it("renders", async ({ expect }) => {
