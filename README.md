@@ -37,6 +37,6 @@ And will render a form like:
 - [ ] Add tests
 - [ ] Make sub object schemas render a visible boundary between input groups (and maybe additional label?)
 - [ ] Enum / Select support
-- [ ] Checkbox input
+- [x] Checkbox input
 - [ ] Support more formats / input types
 - [ ] Proper install instructions / publish to npm

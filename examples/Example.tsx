@@ -12,6 +12,8 @@ const ExampleSchema = T.Object({
     state: T.String(),
   }),
   email: T.String({ format: "email" }),
+  website: T.String({ format: "uri" }),
+  confirm: T.Boolean(),
 });
 
 function Example() {

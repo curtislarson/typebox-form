@@ -1,6 +1,6 @@
 import { Static, TObject, TProperties, TSchema } from "@sinclair/typebox";
 import { useCallback, useMemo } from "preact/hooks";
-import { FNumber, FPrimitive, FString } from "./types";
+import { FormSchema } from "./types";
 import { TargetedEvent } from "preact/compat";
 import { signal, computed, batch } from "@preact/signals";
 import { TypeGuard } from "@sinclair/typebox/guard";
@@ -12,17 +12,17 @@ function createReactivePrimitiveSchema(schema: TSchema) {
   return Object.assign(schema, {
     value: signal<string | number | undefined>(undefined),
     error: signal<string | undefined>(undefined),
-  }) as FString | FNumber;
+  }) as FormSchema;
 }
 
-function createReactiveSchema(properties: TProperties): [string, FPrimitive][] {
+function createReactiveSchema(properties: TProperties): [string, FormSchema][] {
   return Object.entries(properties).flatMap(([propName, schema]) => {
     if (schema.$id == null) {
       schema.$id = propName;
     }
     const idPath = `/${schema.$id}`;
     if (TypeGuard.TObject(schema)) {
-      const subSchemas: [string, FPrimitive][] = createReactiveSchema(schema.properties).map(([subId, subSchema]) => [
+      const subSchemas: [string, FormSchema][] = createReactiveSchema(schema.properties).map(([subId, subSchema]) => [
         `${idPath}${subId}`,
         subSchema,
       ]);

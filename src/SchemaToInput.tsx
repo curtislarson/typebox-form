@@ -1,9 +1,11 @@
 import { TypeGuard } from "@sinclair/typebox/guard";
 import SchemaInput from "./SchemaInput";
-import { FNumber, FString } from "./types";
+import { FormSchema } from "./types";
+import SchemaCheckboxInput from "./SchemaCheckboxInput";
+import { Signal } from "@preact/signals";
 
 export interface SchemaToInputProps {
-  schema: FNumber | FString;
+  schema: FormSchema;
 }
 
 function uppercaseFirst(val: string) {
@@ -21,15 +23,28 @@ export default function SchemaToInput(props: SchemaToInputProps) {
       : [],
   };
 
-  if (TypeGuard.TString(props.schema)) {
+  if (TypeGuard.TDate(props.schema)) {
+    return <SchemaInput {...sharedProps} type="date" value={props.schema.value} error={props.schema.error} />;
+  } else if (TypeGuard.TString(props.schema)) {
     if (props.schema.format) {
       if (props.schema.format === "email") {
         return <SchemaInput {...sharedProps} type="email" value={props.schema.value} error={props.schema.error} />;
+      } else if (props.schema.format === "uri") {
+        return <SchemaInput {...sharedProps} type="url" value={props.schema.value} error={props.schema.error} />;
       }
     }
     return <SchemaInput {...sharedProps} type="text" value={props.schema.value} error={props.schema.error} />;
   } else if (TypeGuard.TNumber(props.schema)) {
     return <SchemaInput {...sharedProps} type="number" value={props.schema.value} error={props.schema.error} />;
+  } else if (TypeGuard.TBoolean(props.schema)) {
+    return (
+      <SchemaCheckboxInput
+        {...sharedProps}
+        type="checkbox"
+        value={props.schema.value as unknown as Signal<boolean>}
+        error={props.schema.error}
+      />
+    );
   } else {
     return <></>;
   }

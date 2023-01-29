@@ -1,21 +1,14 @@
 import { Signal } from "@preact/signals";
-import { TNumber, TString } from "@sinclair/typebox";
+import { TBoolean, TNumber, TSchema, TString } from "@sinclair/typebox";
 
 export type SchemaValue = string | number | string[];
 
-export interface FNumber extends TNumber {
+export type FormSchema<T extends TSchema = TSchema> = T & {
   $id: string;
-  value: Signal<number>;
   error: Signal<string>;
-}
+} & (T extends TBoolean ? { value: Signal<boolean> } : { value: Signal<string | number> });
 
-export interface FString extends TString {
-  $id: string;
-  value: Signal<string>;
-  error: Signal<string>;
-}
-
-export type FPrimitive = FString | FNumber;
+export type FPrimitive = FormSchema<TString | TNumber | TBoolean>;
 
 export type FSchema = FPrimitive | FObject;
 
