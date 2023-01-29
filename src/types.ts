@@ -3,8 +3,6 @@ import { TNumber, TString } from "@sinclair/typebox";
 
 export type SchemaValue = string | number | string[];
 
-export type FormGroupValue = Record<string, SchemaValue>;
-
 export interface FNumber extends TNumber {
   $id: string;
   value: Signal<number>;

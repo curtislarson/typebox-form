@@ -33,6 +33,7 @@ export default function SchemaInput<V extends SchemaValue>(props: SchemaInputPro
             if (e.target instanceof HTMLInputElement) {
               const value = (props.type === "number" ? Number(e.target.value) : e.target.value) as V;
               props.value.value = value;
+              props.error.value = undefined;
             }
           }}
         />
