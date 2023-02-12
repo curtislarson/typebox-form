@@ -4,7 +4,7 @@ import { FormSchema } from "./types";
 import SchemaCheckboxInput from "./SchemaCheckboxInput";
 import { Signal } from "@preact/signals";
 
-export interface SchemaToInputProps {
+export interface SchemaInputControllerProps {
   schema: FormSchema;
 }
 
@@ -12,7 +12,7 @@ function uppercaseFirst(val: string) {
   return `${val[0].toUpperCase()}${val.slice(1)}`;
 }
 
-export default function SchemaToInput(props: SchemaToInputProps) {
+export default function SchemaInputController(props: SchemaInputControllerProps) {
   const sharedProps = {
     id: props.schema.$id,
     label: props.schema.title ?? uppercaseFirst(props.schema.$id),
@@ -21,6 +21,7 @@ export default function SchemaToInput(props: SchemaToInputProps) {
         ? props.schema.examples
         : [props.schema.examples]
       : [],
+    defaultValue: props.schema.default as string | undefined,
   };
 
   if (TypeGuard.TDate(props.schema)) {
@@ -34,7 +35,7 @@ export default function SchemaToInput(props: SchemaToInputProps) {
       }
     }
     return <SchemaInput {...sharedProps} type="text" value={props.schema.value} error={props.schema.error} />;
-  } else if (TypeGuard.TNumber(props.schema)) {
+  } else if (TypeGuard.TNumber(props.schema) || TypeGuard.TInteger(props.schema)) {
     return <SchemaInput {...sharedProps} type="number" value={props.schema.value} error={props.schema.error} />;
   } else if (TypeGuard.TBoolean(props.schema)) {
     return (

@@ -7,6 +7,7 @@ export type SchemaInputProps = {
   id: string;
   label: string;
   examples: string[];
+  defaultValue?: string;
   error: Signal<string | undefined>;
   value: Signal<string | number>;
 };
@@ -22,11 +23,12 @@ export default function SchemaInput(props: SchemaInputProps) {
           type={props.type}
           name={props.id}
           id={props.id}
+          defaultValue={props.defaultValue}
           data-testid={`${props.id}-input`}
-          className={`shadow-sm block w-full sm:text-sm rounded-md ${
+          className={`mt-1 block w-full rounded-md shadow-sm ${
             props.error.peek()
-              ? "border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500"
-              : "focus:ring-indigo-500 focus:border-indigo-500 border-gray-300"
+              ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500"
+              : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
           }`}
           placeholder={props.examples[0]}
           value={props.value}

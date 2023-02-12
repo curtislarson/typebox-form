@@ -26,5 +26,5 @@ module.exports = {
       },
     ],
   },
-  ignorePatterns: ["/dist/*.d.ts", ".eslintrc.cjs", "tailwind.config.cjs", "vite.config.ts"],
+  ignorePatterns: ["/dist/*.d.ts", ".eslintrc.cjs", "prettier.config.cjs", "tailwind.config.cjs", "vite.config.ts"],
 };

@@ -20,10 +20,10 @@ export default function SchemaCheckboxInput(props: SchemaCheckboxInputProps) {
               name={props.id}
               id={props.id}
               data-testid={`${props.id}-input`}
-              class={`shadow-sm block  sm:text-sm rounded-md ${
+              class={`block rounded-md shadow-sm sm:text-sm ${
                 props.error.peek()
-                  ? "border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500"
-                  : "focus:ring-indigo-500 focus:border-indigo-500 border-gray-300"
+                  ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500"
+                  : "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
               }`}
               placeholder={props.examples[0]}
               checked={props.value}

@@ -4,7 +4,7 @@ import { FormSchema } from "./types";
 import { TargetedEvent } from "preact/compat";
 import { signal, computed, batch } from "@preact/signals";
 import { TypeGuard } from "@sinclair/typebox/guard";
-import SchemaToInput from "./SchemaToInput";
+import SchemaInputController from "./SchemaInputController";
 import { TypeCompiler, ValueError } from "@sinclair/typebox/compiler";
 import { ValuePointer } from "@sinclair/typebox/value";
 
@@ -88,15 +88,15 @@ export default function TypeBoxForm<T extends TObject>({
 
   return (
     <div>
-      {title && <h1 class="text-lg leading-6 font-medium text-gray-900">{title}</h1>}
+      {title && <h1 class="text-lg font-medium leading-6 text-gray-900">{title}</h1>}
       <form class="mt-6" onSubmit={(e) => onSubmit(e)}>
         {Object.values(reactiveSchema).map((schema) => (
           <div class="mb-2">
-            <SchemaToInput key={schema.$id} schema={schema} />
+            <SchemaInputController key={schema.$id} schema={schema} />
           </div>
         ))}
         <div>
-          <button type="submit" class="mt-5 px-5 py-2.5 mr-2 mb-2 text-sm text-white bg-blue-700 rounded-md">
+          <button type="submit" class="mt-5 mr-2 mb-2 rounded-md bg-blue-700 px-5 py-2.5 text-sm text-white">
             Save
           </button>
         </div>
