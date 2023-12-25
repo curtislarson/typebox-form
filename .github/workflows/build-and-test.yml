@@ -1,0 +1,22 @@
+name: 🚀 Build and Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20.10.0
+
+      - name: Install pnpm Dependencies
+        run: npx pnpm i
+
+      - name: Build
+        run: npx pnpm run build

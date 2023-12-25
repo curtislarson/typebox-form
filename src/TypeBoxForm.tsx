@@ -1,9 +1,14 @@
-import { Static, TObject, TProperties, TSchema } from "@sinclair/typebox";
+import {
+  Static,
+  TObject,
+  TProperties,
+  TSchema,
+  TypeGuard,
+} from "@sinclair/typebox";
 import { useCallback, useMemo } from "preact/hooks";
 import { FormSchema } from "./types";
 import { TargetedEvent } from "preact/compat";
-import { signal, computed, batch } from "@preact/signals";
-import { TypeGuard } from "@sinclair/typebox/guard";
+import { batch, computed, signal } from "@preact/signals";
 import SchemaInputController from "./SchemaInputController";
 import { TypeCompiler, ValueError } from "@sinclair/typebox/compiler";
 import { ValuePointer } from "@sinclair/typebox/value";
@@ -21,8 +26,10 @@ function createReactiveSchema(properties: TProperties): [string, FormSchema][] {
       schema.$id = propName;
     }
     const idPath = `/${schema.$id}`;
-    if (TypeGuard.TObject(schema)) {
-      const subSchemas: [string, FormSchema][] = createReactiveSchema(schema.properties).map(([subId, subSchema]) => [
+    if (TypeGuard.IsObject(schema)) {
+      const subSchemas: [string, FormSchema][] = createReactiveSchema(
+        schema.properties,
+      ).map(([subId, subSchema]) => [
         `${idPath}${subId}`,
         subSchema,
       ]);
@@ -83,12 +90,14 @@ export default function TypeBoxForm<T extends TObject>({
         }
       }
     },
-    [reactiveSchema, Check, data, onFormSubmit, onFormError]
+    [reactiveSchema, Check, data, onFormSubmit, onFormError],
   );
 
   return (
     <div>
-      {title && <h1 class="text-lg font-medium leading-6 text-gray-900">{title}</h1>}
+      {title && (
+        <h1 class="text-lg font-medium leading-6 text-gray-900">{title}</h1>
+      )}
       <form class="mt-6" onSubmit={(e) => onSubmit(e)}>
         {Object.values(reactiveSchema).map((schema) => (
           <div class="mb-2">
@@ -96,7 +105,10 @@ export default function TypeBoxForm<T extends TObject>({
           </div>
         ))}
         <div>
-          <button type="submit" class="mt-5 mr-2 mb-2 rounded-md bg-blue-700 px-5 py-2.5 text-sm text-white">
+          <button
+            type="submit"
+            class="mt-5 mr-2 mb-2 rounded-md bg-blue-700 px-5 py-2.5 text-sm text-white"
+          >
             Save
           </button>
         </div>

@@ -1,4 +1,4 @@
-import { TypeGuard } from "@sinclair/typebox/guard";
+import { TypeGuard } from "@sinclair/typebox";
 import SchemaInput from "./SchemaInput";
 import { FormSchema } from "./types";
 import SchemaCheckboxInput from "./SchemaCheckboxInput";
@@ -24,9 +24,9 @@ export default function SchemaInputController(props: SchemaInputControllerProps)
     defaultValue: props.schema.default as string | undefined,
   };
 
-  if (TypeGuard.TDate(props.schema)) {
+  if (TypeGuard.IsDate(props.schema)) {
     return <SchemaInput {...sharedProps} type="date" value={props.schema.value} error={props.schema.error} />;
-  } else if (TypeGuard.TString(props.schema)) {
+  } else if (TypeGuard.IsString(props.schema)) {
     if (props.schema.format) {
       if (props.schema.format === "email") {
         return <SchemaInput {...sharedProps} type="email" value={props.schema.value} error={props.schema.error} />;
@@ -35,9 +35,9 @@ export default function SchemaInputController(props: SchemaInputControllerProps)
       }
     }
     return <SchemaInput {...sharedProps} type="text" value={props.schema.value} error={props.schema.error} />;
-  } else if (TypeGuard.TNumber(props.schema) || TypeGuard.TInteger(props.schema)) {
+  } else if (TypeGuard.IsNumber(props.schema) || TypeGuard.IsInteger(props.schema)) {
     return <SchemaInput {...sharedProps} type="number" value={props.schema.value} error={props.schema.error} />;
-  } else if (TypeGuard.TBoolean(props.schema)) {
+  } else if (TypeGuard.IsBoolean(props.schema)) {
     return (
       <SchemaCheckboxInput
         {...sharedProps}
