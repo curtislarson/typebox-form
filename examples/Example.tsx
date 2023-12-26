@@ -6,7 +6,6 @@ import "./main.css";
 
 const ExampleSchema = T.Object({
   name: T.String(),
-  age: T.Number(),
   location: T.Object({
     city: T.String(),
     state: T.String(),

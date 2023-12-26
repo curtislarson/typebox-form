@@ -13,12 +13,17 @@ Note that this also uses `preact`, `@preact/signals`, and `tailwindcss` because 
 ```tsx
 const ExampleSchema = T.Object({
   name: T.String(),
-  age: T.Number(),
   location: T.Object({
     city: T.String(),
     state: T.String(),
   }),
   email: T.String({ format: "email" }),
+  website: T.String({ format: "uri" }),
+  password: T.String({ format: "password" }),
+  date: T.Date(),
+  dateString: T.String({ format: "date" }),
+  selectValue: T.Enum({ foo: "bar", baz: "bing" }),
+  confirm: T.Boolean(),
 });
 
 <TypeBoxForm title="Example Form" schema={ExampleSchema} />;
