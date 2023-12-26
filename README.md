@@ -35,8 +35,7 @@ And will render a form like:
 ## TODO
 
 - [ ] Add tests
+- [ ] Switch to primary color schema instead of hard coded gray one
 - [ ] Make sub object schemas render a visible boundary between input groups (and maybe additional label?)
-- [ ] Enum / Select support
-- [x] Checkbox input
 - [ ] Support more formats / input types
 - [ ] Proper install instructions / publish to npm

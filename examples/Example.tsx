@@ -13,16 +13,22 @@ const ExampleSchema = T.Object({
   }),
   email: T.String({ format: "email" }),
   website: T.String({ format: "uri" }),
+  password: T.String({ format: "password" }),
+  date: T.Date(),
+  dateString: T.String({ format: "date" }),
+  selectValue: T.Enum({ foo: "bar", baz: "bing" }),
   confirm: T.Boolean(),
 });
 
 function Example() {
   return (
-    <main class="relative mt-5 w-full px-6 py-12 bg-white shadow-xl shadow-slate-700/10 ring-1 ring-gray-900/5 md:max-w-3xl md:mx-auto lg:max-w-4xl lg:pt-16 lg:pb-28">
-      <div>
-        <TypeBoxForm title="Example Form" schema={ExampleSchema} onFormSubmit={(data) => console.log(data)} />
-      </div>
-    </main>
+    <div>
+      <main class="relative mt-5 w-full bg-white px-6 py-12 shadow-xl shadow-slate-700/10 ring-1 ring-gray-900/5 md:mx-auto md:max-w-3xl lg:max-w-4xl lg:pb-28 lg:pt-16">
+        <div>
+          <TypeBoxForm title="Example Form" schema={ExampleSchema} onFormSubmit={(data) => console.log(data)} />
+        </div>
+      </main>
+    </div>
   );
 }
 

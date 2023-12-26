@@ -1,8 +1,9 @@
-import { TypeGuard } from "@sinclair/typebox";
+import { StringFormatOption, TypeGuard, Hint } from "@sinclair/typebox";
 import SchemaInput from "./SchemaInput";
 import { FormSchema } from "./types";
 import SchemaCheckboxInput from "./SchemaCheckboxInput";
 import { Signal } from "@preact/signals";
+import SchemaSelectInput from "./SchemaSelectInput";
 
 export interface SchemaInputControllerProps {
   schema: FormSchema;
@@ -10,6 +11,19 @@ export interface SchemaInputControllerProps {
 
 function uppercaseFirst(val: string) {
   return `${val[0].toUpperCase()}${val.slice(1)}`;
+}
+
+function inputTypeFromFormat(format: StringFormatOption) {
+  switch (format) {
+    case "email":
+      return "email";
+    case "uri":
+      return "url";
+    case "password":
+      return "password";
+    default:
+      return "text";
+  }
 }
 
 export default function SchemaInputController(props: SchemaInputControllerProps) {
@@ -24,15 +38,20 @@ export default function SchemaInputController(props: SchemaInputControllerProps)
     defaultValue: props.schema.default as string | undefined,
   };
 
-  if (TypeGuard.IsDate(props.schema)) {
+  const schemaHint = props.schema[Hint];
+
+  if (TypeGuard.IsDate(props.schema) || props.schema.format === "date") {
     return <SchemaInput {...sharedProps} type="date" value={props.schema.value} error={props.schema.error} />;
   } else if (TypeGuard.IsString(props.schema)) {
     if (props.schema.format) {
-      if (props.schema.format === "email") {
-        return <SchemaInput {...sharedProps} type="email" value={props.schema.value} error={props.schema.error} />;
-      } else if (props.schema.format === "uri") {
-        return <SchemaInput {...sharedProps} type="url" value={props.schema.value} error={props.schema.error} />;
-      }
+      return (
+        <SchemaInput
+          {...sharedProps}
+          type={inputTypeFromFormat(props.schema.format)}
+          value={props.schema.value}
+          error={props.schema.error}
+        />
+      );
     }
     return <SchemaInput {...sharedProps} type="text" value={props.schema.value} error={props.schema.error} />;
   } else if (TypeGuard.IsNumber(props.schema) || TypeGuard.IsInteger(props.schema)) {
@@ -46,7 +65,14 @@ export default function SchemaInputController(props: SchemaInputControllerProps)
         error={props.schema.error}
       />
     );
-  } else {
+  } else if (schemaHint === "Enum" && "anyOf" in props.schema) {
+    const anyOf = props.schema.anyOf as { const: string }[];
+    const options = anyOf.map((o) => ({ text: o.const, value: o.const }));
+    return (
+      <SchemaSelectInput {...sharedProps} options={options} value={props.schema.value} error={props.schema.error} />
+    );
+  }
+  {
     return <></>;
   }
 }

@@ -1,6 +1,6 @@
 import { Signal } from "@preact/signals";
 
-export type InputType = "text" | "number" | "email" | "date" | "url";
+export type InputType = "text" | "number" | "email" | "date" | "url" | "password";
 
 export type SchemaInputProps = {
   type: InputType;
